@@ -1,0 +1,51 @@
+*.py[co]
+
+# Linux
+*~
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+include
+lib
+local
+var
+sdist
+develop-eggs
+.installed.cfg
+.eggs
+.cache
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+htmlcov
+
+# Sublime Text
+python-edifact.sublime-project
+python-edifact.sublime-workspace
+
+#Translations
+*.mo
+
+#Mr Developer
+.mr.developer.cfg
+
+#Environment
+env
+
+# Virtualenv
+venv/
+
+violations.flake8.txt
+
+# Built docs
+doc/_build/**
