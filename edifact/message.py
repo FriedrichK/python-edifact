@@ -10,7 +10,7 @@ def contains_una(input_string):
 class Message(object):
     """Wrapper class for EDIFACT messages."""
 
-    _una = None
+    una = None
 
     def __init__(self, src_string=None):
         """Constructor."""
@@ -24,19 +24,11 @@ class Message(object):
             una = UNA(src_string)
         else:
             una = UNA()
-        self.set_una(una)
-
-    def set_una(self, una):
-        """Set the UNA component."""
-        self._una = una
-
-    def get_una(self):
-        """Return UNA component."""
-        return self._una
+        self.una = una
 
 
 class UNA(object):
-    """Wrapper class for UNA components."""
+    """Wrapper class for UNA (Service String Advice) components."""
 
     component_data_element_separator = ':'  # pylint: disable=invalid-name
     data_element_separator = '+'
@@ -87,3 +79,17 @@ class UNA(object):
             self.release_character,
             self.segment_terminator,
         )
+
+
+class UNB(object):
+    """Wrapper class for UNB (Interchange Header) components."""
+
+    def __init__(self, src_string=None):
+        """Constructor."""
+        if src_string:
+            self.init_from_string(src_string)
+
+    def init_from_string(self, src_string):
+        """Initialize from string source."""
+        if not src_string:
+            raise ValueError('empty source string')
