@@ -2,7 +2,7 @@
 
 import unittest
 
-from helpers import load_edifact_sample
+from tests.helpers import load_edifact_sample
 
 from edifact import from_string
 
