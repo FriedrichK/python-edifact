@@ -7,6 +7,7 @@ from setuptools import setup, find_packages
 
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'tests')))
+print sys.path
 
 setup(
     name='python-edifact',
