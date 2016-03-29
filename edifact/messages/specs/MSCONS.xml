@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<TRANSMISSION>
+	<UNH status="M" repeats="1"></UNH>
+	<BGM status="M" repeats="1"></BGM>
+	<DTM status="M" repeats="9"></DTM>
+	<GROUP status="C" repeats="9">
+		<RFF status="M" repeats="1"></RFF>
+		<DTM status="C" repeats="9"></DTM>
+	</GROUP>
+	<GROUP status="C" repeats="99">
+		<NAD status="M" repeats="1"></RFF>
+		<GROUP status="C" repeats="9">
+			<RFF status="M" repeats="1"></RFF>
+			<DTM status="C" repeats="9"></DTM>
+		</GROUP>
+		<GROUP status="C" repeats="5">
+			<CTA status="M" repeats="1"></CTA>
+			<COM status="C" repeats="9"></COM>
+		</GROUP>
+	</GROUP>
+	<UNS status="M" repeats="1"></UNS>
+	<GROUP status="M" repeats="99999">
+		<NAD status="M" repeats="1"></RFF>
+		<GROUP status="M" repeats="99999">
+			<LOC status="M" repeats="1"></LOC>
+			<DTM status="C" repeats="9"></DTM>
+			<GROUP status="C" repeats="99">
+				<RFF status="M" repeats="1"></RFF>
+				<DTM status="C" repeats="9"></DTM>
+			</GROUP>
+			<GROUP status="C" repeats="99">
+				<CCI status="M" repeats="1"></CCI>
+				<DTM status="C" repeats="99"></DTM>
+			</GROUP>
+			<GROUP status="C" repeats="99999">
+				<LIN status="M" repeats="1"></LIN>
+				<PIA status="C" repeats="9"></PIA>
+				<IMD status="C" repeats="9"></IMD>
+				<PRI status="C" repeats="9"></PRI>
+				<NAD status="C" repeats="9"></NAD>
+				<MOA status="C" repeats="9"></MOA>
+				<GROUP status="M" repeats="9999">
+					<QTY status="M" repeats="1"></QTY>
+					<DTM status="C" repeats="9"></DTM>
+				</GROUP>
+				<GROUP status="M" repeats="99">
+					<CCI status="M" repeats="1"></CCI>
+					<MEA status="C" repeats="99"></MEA>
+					<DTM status="C" repeats="9"></DTM>
+				</GROUP>
+			</GROUP>
+		</GROUP>
+	</GROUP>
+	<CNT status="C" repeats="99"></CNT>
+	<UNT status="M" repeats="1"></UNT>
+</TRANSMISSION>

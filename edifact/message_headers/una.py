@@ -1,36 +1,7 @@
-# -*- coding: utf-8 -*-
-"""This module provides the wrappers for basic EDIFACT components."""
-
-
-def contains_una(input_string):
-    """Return True if the message contains the optional UNA segment, False if not."""
-    return input_string[:3] == 'UNA'
-
-
-class Message(object):
-    """Wrapper class for EDIFACT messages."""
-
-    una = None
-
-    def __init__(self, src_string=None):
-        """Constructor."""
-        if src_string:
-            self.init_from_string(src_string)
-
-    def init_from_string(self, src_string):
-        """Initialize from string source."""
-        # Set UNA, optionally from source
-        if contains_una(src_string):
-            una = UNA(src_string)
-        else:
-            una = UNA()
-        self.una = una
-
-
 class UNA(object):
     """Wrapper class for UNA (Service String Advice) components."""
 
-    component_data_element_separator = ':'  # pylint: disable=invalid-name
+    component_data_element_separator = ':'
     data_element_separator = '+'
     decimal_mark = ','
     release_character = '?'
@@ -53,9 +24,9 @@ class UNA(object):
     def __init__(self, src_string=None):
         """Constructor."""
         if src_string:
-            self.init_from_string(src_string)
+            self._init_from_string(src_string)
 
-    def init_from_string(self, src_string):
+    def _init_from_string(self, src_string):
         """Initialize from string source."""
         if not src_string:
             raise ValueError('empty source string')
@@ -79,17 +50,3 @@ class UNA(object):
             self.release_character,
             self.segment_terminator,
         )
-
-
-class UNB(object):
-    """Wrapper class for UNB (Interchange Header) components."""
-
-    def __init__(self, src_string=None):
-        """Constructor."""
-        if src_string:
-            self.init_from_string(src_string)
-
-    def init_from_string(self, src_string):
-        """Initialize from string source."""
-        if not src_string:
-            raise ValueError('empty source string')

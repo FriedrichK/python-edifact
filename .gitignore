@@ -49,3 +49,6 @@ violations.flake8.txt
 
 # Built docs
 docs/_build/**
+
+# Misc
+_backup/

@@ -13,5 +13,4 @@ class DTM(Segment):
     format = Composite(index=2, max_length=3, required=True)
 
     class Meta:
-        """Information about this class."""
         identifier = 'DTM'
