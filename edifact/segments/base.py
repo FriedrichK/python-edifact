@@ -32,7 +32,7 @@ class Composite(object):
         return self.content or u''
 
 
-class SegmentMetaclass(type):
+class SegmentMeta(type):
     """Meta class for segments."""
 
     def __new__(cls, name, bases, attrs):
@@ -54,10 +54,10 @@ class SegmentMetaclass(type):
         # Meta
         attrs['_meta'] = attrs.pop('Meta', None)
 
-        return super(SegmentMetaclass, cls).__new__(cls, name, bases, attrs)
+        return super(SegmentMeta, cls).__new__(cls, name, bases, attrs)
 
 
-class Segment(six.with_metaclass(SegmentMetaclass)):
+class Segment(six.with_metaclass(SegmentMeta)):
     """Base class for segments."""
 
     def __init__(self, una, **kwargs):
