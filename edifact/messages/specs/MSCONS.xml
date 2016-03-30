@@ -41,7 +41,7 @@
 					<QTY status="M" repeats="1"></QTY>
 					<DTM status="C" repeats="9"></DTM>
 				</GROUP>
-				<GROUP status="M" repeats="99">
+				<GROUP status="C" repeats="99">
 					<CCI status="M" repeats="1"></CCI>
 					<MEA status="C" repeats="99"></MEA>
 					<DTM status="C" repeats="9"></DTM>
