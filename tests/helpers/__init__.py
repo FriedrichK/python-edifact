@@ -6,7 +6,7 @@ import os
 
 def load_edifact_sample(name):
     """Load an EDIFACT text sample, ignoring commented lines."""
-    path = os.path.dirname(__file__) + '/../../testdata/' + name
+    path = os.path.dirname(__file__) + '/../data/' + name
     content = ""
 
     for line in open(path):
