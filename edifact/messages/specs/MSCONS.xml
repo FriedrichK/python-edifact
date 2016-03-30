@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <TRANSMISSION>
-	<UNH status="M" repeats="1"></UNH>
-	<BGM status="M" repeats="1"></BGM>
 	<DTM status="M" repeats="9"></DTM>
 	<GROUP status="C" repeats="9">
 		<RFF status="M" repeats="1"></RFF>
 		<DTM status="C" repeats="9"></DTM>
 	</GROUP>
 	<GROUP status="C" repeats="99">
-		<NAD status="M" repeats="1"></RFF>
+		<NAD status="M" repeats="1"></NAD>
 		<GROUP status="C" repeats="9">
 			<RFF status="M" repeats="1"></RFF>
 			<DTM status="C" repeats="9"></DTM>
@@ -20,7 +18,7 @@
 	</GROUP>
 	<UNS status="M" repeats="1"></UNS>
 	<GROUP status="M" repeats="99999">
-		<NAD status="M" repeats="1"></RFF>
+		<NAD status="M" repeats="1"></NAD>
 		<GROUP status="M" repeats="99999">
 			<LOC status="M" repeats="1"></LOC>
 			<DTM status="C" repeats="9"></DTM>
@@ -52,5 +50,4 @@
 		</GROUP>
 	</GROUP>
 	<CNT status="C" repeats="99"></CNT>
-	<UNT status="M" repeats="1"></UNT>
 </TRANSMISSION>

@@ -3,6 +3,8 @@
 
 import regex
 
+from edifact.exceptions import MissingSegmentAtPositionError
+
 
 def separate_segments(src_string, segment_terminator='\'', release_character='?'):
     """Separate the segments in an EDIFACT message string."""
@@ -30,3 +32,13 @@ def separate_components(src_string, data_element_separator='+', component_data_e
             output.append(components)
 
     return output
+
+
+def validate_anchor_segments(segments):
+    """Very basic validation of segments, making sure UNH, BGM and UNT exist and are in the right place."""
+    if not (segments[0][0] == 'UNH' or segments[1][0] == 'UNH'):
+        raise MissingSegmentAtPositionError('UNH')
+    if not (segments[1][0] == 'BGM' or segments[2][0] == 'BGM'):
+        raise MissingSegmentAtPositionError('BGM')
+    if not segments[-1][0] == 'UNT':
+        raise MissingSegmentAtPositionError('UNT')

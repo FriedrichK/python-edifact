@@ -3,6 +3,7 @@ from edifact.messages.base import Message
 
 
 class MSCONS(Message):
-    pass
+    class Meta:
+        spec = 'MSCONS'
 
 edifact.configuration.MESSAGE_CLASSES['MSCONS'] = MSCONS
