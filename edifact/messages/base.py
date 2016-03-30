@@ -183,21 +183,26 @@ class Message(six.with_metaclass(MessageMeta)):
 def group_starts_with_segment(group, tag):
     return group.get(0).tag == tag
 
+
 # Just for now
 class PlaceholderSegment(object):
-    def __init__(self, tag, status='M', repeats='1'):
+    def __init__(self, tag, status='M', repeats='1', label=None, description=None):
         self.tag = tag
         self.status = status
         self.mandatory = status == 'M'
         self.repeats = repeats
+        self.label = label
+        self.description = description
 
 
 class SegmentGroup(object):
-    def __init__(self, elements, status='M', repeats='1'):
+    def __init__(self, elements, status='M', repeats='1', label=None, description=None):
         self.elements = elements
         self.status = status
         self.mandatory = status == 'M'
         self.repeats = repeats
+        self.label = label
+        self.description = description
 
     def get(self, index):
         return self.elements[index]

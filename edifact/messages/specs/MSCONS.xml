@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <TRANSMISSION>
-	<DTM status="M" repeats="9"></DTM>
-	<GROUP status="C" repeats="9">
-		<RFF status="M" repeats="1"></RFF>
-		<DTM status="C" repeats="9"></DTM>
+	<DTM status="M" repeats="9" description="A segment specifying the dates, and when relevant, the times related to the whole message. The segment must be specified at least once to specify the message date as allocated by the sender."></DTM>
+	<GROUP status="C" repeats="9" label="document_references" description="A group of segments for specifying any references and their dates valid for the whole report.">
+		<RFF status="M" repeats="1" description="A segment for the inclusion of any references related to the complete report, e.g. invoice number, contract number."></RFF>
+		<DTM status="C" repeats="9" description="A segment specifying the date and where necessary the time of the reference detailed in the preceding RFF segment."></DTM>
 	</GROUP>
-	<GROUP status="C" repeats="99">
-		<NAD status="M" repeats="1"></NAD>
-		<GROUP status="C" repeats="9">
-			<RFF status="M" repeats="1"></RFF>
-			<DTM status="C" repeats="9"></DTM>
+	<GROUP status="C" repeats="99" label="transaction_parties" description="A group of segments identifying the parties involved in the transaction, reference numbers associated with the parties, and any contact points and numbers.">
+		<NAD status="M" repeats="1" description="A segment to identify the party name and address, either by coded identification or in clear form. It is recommended that were possible only the coded form of the party identification should be specified, e.g. the buyer and seller are known to each other, thus only the coded identification is required."></NAD>
+		<GROUP status="C" repeats="9" label="party_references" description="A group of segments for specifying any references relating to the party identified in the NAD segment.">
+			<RFF status="M" repeats="1" description="A segment for inclusion of any references related to the current party, e.g. fiscal number, government reference number, etc."></RFF>
+			<DTM status="C" repeats="9" description="A segment specifying the date and where necessary the time of the reference detailed in the preceding RFF segment."></DTM>
 		</GROUP>
-		<GROUP status="C" repeats="5">
-			<CTA status="M" repeats="1"></CTA>
-			<COM status="C" repeats="9"></COM>
+		<GROUP status="C" repeats="5" label="contacts" description="A group of segments identifying the contact person or department for trading party and specifying the communication channel and number.">
+			<CTA status="M" repeats="1" description="A segment to identify a person or department and their function, to whom communication should be directed."></CTA>
+			<COM status="C" repeats="9" description="A segment specifying the communication channel and number for the specified contact."></COM>
 		</GROUP>
 	</GROUP>
-	<UNS status="M" repeats="1"></UNS>
-	<GROUP status="M" repeats="99999">
-		<NAD status="M" repeats="1"></NAD>
-		<GROUP status="M" repeats="99999">
-			<LOC status="M" repeats="1"></LOC>
-			<DTM status="C" repeats="9"></DTM>
-			<GROUP status="C" repeats="99">
-				<RFF status="M" repeats="1"></RFF>
-				<DTM status="C" repeats="9"></DTM>
+	<UNS status="M" repeats="1" description="A segment placed at the start of the detail section to avoid segment collision."></UNS>
+	<GROUP status="M" repeats="99999" label="delivery_parties_and_meters" description="A group of segments identifying the delivery party (premise) and the meter for which consumption is being reported.">
+		<NAD status="M" repeats="1" description="A segment to identify the delivery party (premise) for which the following consumption information is being provided. It is recommended that where possible codes be used to identify the delivery party to facilitate the automatic processing."></NAD>
+		<GROUP status="M" repeats="99999" label="meters" description="A group of segments identifying the meter being reported, the date of the meter read, associated references, the physical characteristics of the meter, and the product or service for which consumption information is reported.">
+			<LOC status="M" repeats="1" description="A segment to allow the identification of the meter to which the consumption information relates. It is recommended that where possible codes be used to identify the delivery party to facilitate automatic processing."></LOC>
+			<DTM status="C" repeats="9" description="A segment to specify dates associated with the reading of the meter."></DTM>
+			<GROUP status="C" repeats="99" label="references" description="A group of segments for specifying any references and associated dates valid for the meter identified in the LOC segment.">
+				<RFF status="M" repeats="1" description="A segment identifying any references related to the meter identified in the LOC segment (e.g. serial number)."></RFF>
+				<DTM status="C" repeats="9" description="A segment to specify any dates associated with the currently referenced document."></DTM>
 			</GROUP>
-			<GROUP status="C" repeats="99">
-				<CCI status="M" repeats="1"></CCI>
-				<DTM status="C" repeats="99"></DTM>
+			<GROUP status="C" repeats="99" label="characteristics" description="A group of segments used to provide characteristic information and associated dates for the current meter.">
+				<CCI status="M" repeats="1" description="A segment to describe the characteristics of the currently identified meter (e.g. sealed meter, banded meter)."></CCI>
+				<DTM status="C" repeats="99" description="A segment specifying the date and where necessary the time related to the previously identified meter characteristics (e.g. installation date, connection date, meter banding date)."></DTM>
 			</GROUP>
-			<GROUP status="C" repeats="99999">
-				<LIN status="M" repeats="1"></LIN>
-				<PIA status="C" repeats="9"></PIA>
-				<IMD status="C" repeats="9"></IMD>
-				<PRI status="C" repeats="9"></PRI>
-				<NAD status="C" repeats="9"></NAD>
-				<MOA status="C" repeats="9"></MOA>
-				<GROUP status="M" repeats="9999">
-					<QTY status="M" repeats="1"></QTY>
-					<DTM status="C" repeats="9"></DTM>
+			<GROUP status="C" repeats="99999" label="output" description="A group of segments providing details of the metered products or services, quantities, characteristics, and any associated dates.">
+				<LIN status="M" repeats="1" description="A segment identifying the metered product or service for which consumption information is being provided."></LIN>
+				<PIA status="C" repeats="9" description="A segment providing additional identification to the product or service specified in the LIN segment (e.g. buyer's or supplier's product codes)."></PIA>
+				<IMD status="C" repeats="9" description="A segment for describing the metered product or service being reported. This segment should only be used for metered products or services that cannot be fully identified by an article number."></IMD>
+				<PRI status="C" repeats="9" description="A segment providing the unit price of the currently identified product or service."></PRI>
+				<NAD status="C" repeats="9" description="A segment to identify parties related to the supply of the service (e.g. party telephoned) or related to the party who supplied the service (e.g. a petrol filling station)."></NAD>
+				<MOA status="C" repeats="9" description="A segment to specify the total cost of the product or service currently being reported upon, e.g. the total cost of local telephone calls."></MOA>
+				<GROUP status="M" repeats="9999" label="consumption" description="A group of segments providing details of the meter read, consumption, correction quantities, and associated dates.">
+					<QTY status="M" repeats="1" description="A segment identifying the consumption details, e.g. opening meter read, consumption, adjustments (correction)."></QTY>
+					<DTM status="C" repeats="9" description="A segment to specify dates related to the previously specified consumption information."></DTM>
 				</GROUP>
-				<GROUP status="C" repeats="99">
-					<CCI status="M" repeats="1"></CCI>
-					<MEA status="C" repeats="99"></MEA>
-					<DTM status="C" repeats="9"></DTM>
+				<GROUP status="C" repeats="99" label="characteristics" description="A group of segments providing characteristic details, measurements, and dates related to the details for the currently identified line item">
+					<CCI status="M" repeats="1" description="A segment used to describe the characteristics of the currently identified product or service (e.g. calorific values, chlorine content)."></CCI>
+					<MEA status="C" repeats="99" description="A segment enabling the indication of measurements related to the characteristics identified in the preceding CCI segment."></MEA>
+					<DTM status="C" repeats="9" description="A segment to specify dates related to the previously specified characteristic information."></DTM>
 				</GROUP>
 			</GROUP>
 		</GROUP>
 	</GROUP>
-	<CNT status="C" repeats="99"></CNT>
+	<CNT status="C" repeats="99" description="A segment by which control totals may be sent by the sender for checking by the receiver."></CNT>
 </TRANSMISSION>
