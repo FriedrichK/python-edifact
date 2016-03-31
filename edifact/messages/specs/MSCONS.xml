@@ -6,7 +6,7 @@
 		<DTM status="C" repeats="9" description="A segment specifying the date and where necessary the time of the reference detailed in the preceding RFF segment."></DTM>
 	</GROUP>
 	<GROUP status="C" repeats="99" label="transaction_parties" description="A group of segments identifying the parties involved in the transaction, reference numbers associated with the parties, and any contact points and numbers.">
-		<NAD status="M" repeats="1" description="A segment to identify the party name and address, either by coded identification or in clear form. It is recommended that were possible only the coded form of the party identification should be specified, e.g. the buyer and seller are known to each other, thus only the coded identification is required."></NAD>
+		<NAD status="M" repeats="1" label="party_identifier" description="A segment to identify the party name and address, either by coded identification or in clear form. It is recommended that were possible only the coded form of the party identification should be specified, e.g. the buyer and seller are known to each other, thus only the coded identification is required."></NAD>
 		<GROUP status="C" repeats="9" label="party_references" description="A group of segments for specifying any references relating to the party identified in the NAD segment.">
 			<RFF status="M" repeats="1" description="A segment for inclusion of any references related to the current party, e.g. fiscal number, government reference number, etc."></RFF>
 			<DTM status="C" repeats="9" description="A segment specifying the date and where necessary the time of the reference detailed in the preceding RFF segment."></DTM>
