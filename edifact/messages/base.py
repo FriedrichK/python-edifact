@@ -3,8 +3,11 @@
 
 import os
 
-import xml.etree.ElementTree as ET
 import six
+
+import xml.etree.ElementTree as ET
+import random
+import string
 
 from edifact.helpers import separate_segments, separate_components, validate_anchor_segments
 from edifact.exceptions import MissingSegmentAtPositionError
@@ -84,6 +87,7 @@ class Message(six.with_metaclass(MessageMeta)):
         segments_to_ignore = ['UNA', 'UNH', 'BGM', 'UNT']
         tag = segments[segment_index][0]
         if tag in segments_to_ignore:
+            edifact_logger.debug('ignoring segment %s with tag %s' % (segment_index, tag,))
             self.process_segments(
                 segments, segment_index + 1, elements_indices, repeats, last_containers
             )
@@ -203,15 +207,11 @@ class Message(six.with_metaclass(MessageMeta)):
         edifact_logger.debug('created new group %s' % group.label)
 
         if parent_groups is not None and len(parent_groups) > 0:
-            if group.label not in parent_groups[-1]:
-                parent_groups[-1][group.label] = []
-            parent_groups[-1][group.label].append(group)
-            edifact_logger.debug('added group %s to parent group %s' % (group.label, parent_groups[-1].label,))
+            parent_groups[-1].add(group.label, group)
+            edifact_logger.debug('added group %s with uid %s to parent group %s' % (group.label, group.uid, parent_groups[-1].label,))
         else:
-            if group.label not in self.data:
-                self.data[group.label] = []
-            self.data[group.label].append(group)
-            edifact_logger.debug('added group %s to root' % group.label)
+            self.add_to_data(group.label, group)
+            edifact_logger.debug('added group %s with uid %s to root' % (group.label, group.uid,))
 
         return group
 
@@ -220,14 +220,10 @@ class Message(six.with_metaclass(MessageMeta)):
         edifact_logger.debug('new segment with data: %s' % segment_data)
 
         if parent_groups is not None and len(parent_groups) > 0:
-            if segment.label not in parent_groups[-1]:
-                parent_groups[-1][segment.label] = []
-            parent_groups[-1][segment.label].append(segment)
-            edifact_logger.debug('added segment %s to group %s' % (segment.label, parent_groups[-1].label,))
+            parent_groups[-1].add(segment.label, segment)
+            edifact_logger.debug('added segment %s to group %s with uid %s' % (segment.label, parent_groups[-1].label, parent_groups[-1].uid,))
         else:
-            if segment.label not in self.data:
-                self.data[segment.label] = []
-            self.data[segment.label].append(segment)
+            self.add_to_data(segment.label, segment)
             edifact_logger.debug('added segment %s to root' % segment.label)
 
     def get_element(self, elements_indices):
@@ -241,6 +237,11 @@ class Message(six.with_metaclass(MessageMeta)):
             except IndexError:
                 result = None
         return result
+
+    def add_to_data(self, label, element):
+        if label not in self.data:
+            self.data[label] = []
+        self.data[label].append(element)
 
     # Magic
     def __getitem__(self, key):
@@ -289,32 +290,21 @@ class SegmentGroup(object):
 
 
 class Group(object):
-    elements = {}
-
     def __init__(self, mandatory=False, repeats=1, label=None, description=None, repeat=0):
         self.mandatory = mandatory
         self.repeats = repeats
         self.label = label
         self.description = description
         self.repeat = repeat
+        self.uid = ''.join(random.choice(string.lowercase) for i in range(5))
 
-    def __iter__(self):
-        return self.elements.__iter__()
-
-    def __len__(self):
-        return len(self.elements)
-
-    def __getitem__(self, key):
-        return self.elements[key]
-
-    def __setitem__(self, key, value):
-        self.elements[key] = value
-
-    def __delitem__(self, key):
-        del self.elements[key]
-
-    def __contains__(self, item):
-        return item in self.elements
+    def add(self, label, element):
+        if not hasattr(self, 'elements'):
+            self.elements = {}
+        if label not in self.elements:
+            self.elements[label] = []
+        self.elements[label].append(element)
+        edifact_logger.debug('group %s (%s) added element %s, elements are now %s' % (self.label, self.uid, element.label, len(self.elements),))
 
 
 # Mock

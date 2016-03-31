@@ -13,6 +13,5 @@ class ParseTest(unittest.TestCase):
     def test_returns_expected_segment_count(self):
         mscons_sample = load_edifact_sample('edifact_sample_mscons_1.txt')
         mscons = from_string(mscons_sample)
-        #print mscons.data['transaction_parties'][1].elements
-        self.assertEqual(mscons.data['transaction_parties'][0]['party_identifier'][0].data[0], 'SU')
-        self.assertEqual(mscons.data['transaction_parties'][1]['party_identifier'][0].data[0], 'BY')
+        self.assertEqual(mscons.data['transaction_parties'][0].elements['party_identifier'][0].data[0], 'SU')
+        self.assertEqual(mscons.data['transaction_parties'][1].elements['party_identifier'][0].data[0], 'BY')
