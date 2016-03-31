@@ -72,9 +72,12 @@ class Message(six.with_metaclass(MessageMeta)):
         self.process_segments(segments, 0, [0], 0)
 
     def process_segments(self, segments, segment_index, elements_indices, repeats, last_containers=[]):
-        edifact_logger.debug('element indices: ' + ', '.join([unicode(ei) for ei in elements_indices]))
+        edifact_logger.debug('------------------------- process segment (%s/%s) ----------------------' % (segment_index, len(segments),))
+        edifact_logger.debug('element indices: ' + ', '.join([unicode(ei) for ei in elements_indices]) + ', repeats: %s' % repeats)
+
         # Exit at the end of segments or elements
         if segment_index >= len(segments) or len(elements_indices) < 1:
+            edifact_logger.debug('end of segments')
             return
 
         # Skip certain segments
@@ -84,24 +87,29 @@ class Message(six.with_metaclass(MessageMeta)):
             self.process_segments(
                 segments, segment_index + 1, elements_indices, repeats, last_containers
             )
+            return
 
         # Process segment
         segment_or_group = self.get_element(elements_indices)
+        edifact_logger.debug('segment %s -> %s' % (segment_index, segments[segment_index],))
 
         # End of group or hierarchy
         if segment_or_group is None:
+            edifact_logger.debug('element is None')
             segment_index, elements_indices, repeats, last_containers = self.process_end(
                 segments, segment_index, elements_indices, repeats, last_containers
             )
 
         # Process group
         if isinstance(segment_or_group, SegmentGroup):
+            edifact_logger.debug('element is a group -> %s' % segment_or_group.label)
             segment_index, elements_indices, repeats, last_containers = self.process_group(
                 segments, segment_index, elements_indices, repeats, last_containers
             )
 
         # Process segment
         if isinstance(segment_or_group, PlaceholderSegment):
+            edifact_logger.debug('element is a segment')
             segment_index, elements_indices, repeats, last_containers = self.process_segment(
                 segments, segment_index, elements_indices, repeats, last_containers
             )
@@ -130,17 +138,9 @@ class Message(six.with_metaclass(MessageMeta)):
 
         # If repeats are exhausted for this group, we stop right there
         if repeats + 1 >= group.repeats:
-            segment_index, elements_indices, repeats, last_containers = self.process_end(
-                segments, segment_index, elements_indices, repeats, last_containers
-            )
-            return segment_index, elements_indices, repeats, last_containers
+            return self.process_end(segments, segment_index, elements_indices, repeats, last_containers)
         else:
-            #repeat_group = self.add_group(group, last_containers[:-1])
-            #last_containers[-1] = repeat_group
             repeats += 1
-            #edifact_logger.debug('repeating group %s at indices %s, run %s' % (
-            #    group.label, ', '.join([unicode(ei) for ei in elements_indices]), unicode(repeats + 1))
-            #)
 
         # Group does not have current segment as first segment
         if not group_starts_with_segment(group, tag):
@@ -151,11 +151,12 @@ class Message(six.with_metaclass(MessageMeta)):
 
             # Otherwise move on
             else:
+                repeats = 0
                 elements_indices[-1] += 1
 
         # Create and enter group
         else:
-            last_containers.append(self.add_group(group, last_containers))
+            last_containers.append(self.add_group(group, last_containers, repeats))
             edifact_logger.debug('expanded groups %s' % ', '.join([c.label for c in last_containers]))
             elements_indices.append(0)
 
@@ -175,6 +176,7 @@ class Message(six.with_metaclass(MessageMeta)):
 
             # Otherwise move on
             else:
+                repeats = 0
                 elements_indices[-1] += 1
 
         # Process matching tags
@@ -186,6 +188,7 @@ class Message(six.with_metaclass(MessageMeta)):
             segment_index += 1
 
             # Move on to next element if repeats are exhausted, otherwise repeat
+            edifact_logger.debug('check repeats: %s' % repeats)
             if repeats + 1 >= element.repeats:
                 elements_indices[-1] += 1
                 repeats = 0
@@ -195,7 +198,7 @@ class Message(six.with_metaclass(MessageMeta)):
         # Return
         return segment_index, elements_indices, repeats, last_containers
 
-    def add_group(self, placeholder_group, parent_groups):
+    def add_group(self, placeholder_group, parent_groups, repeats):
         group = Group(**placeholder_group.__dict__())
         edifact_logger.debug('created new group %s' % group.label)
 
@@ -214,12 +217,13 @@ class Message(six.with_metaclass(MessageMeta)):
 
     def add_segment(self, element, segment_data, parent_groups):
         segment = DummySegment(segment_data[1:], **element.__dict__())
+        edifact_logger.debug('new segment with data: %s' % segment_data)
 
         if parent_groups is not None and len(parent_groups) > 0:
             if segment.label not in parent_groups[-1]:
                 parent_groups[-1][segment.label] = []
             parent_groups[-1][segment.label].append(segment)
-            edifact_logger.debug('added segment %s to group %s' % (segment.label, parent_groups[-1].label))
+            edifact_logger.debug('added segment %s to group %s' % (segment.label, parent_groups[-1].label,))
         else:
             if segment.label not in self.data:
                 self.data[segment.label] = []
@@ -252,7 +256,7 @@ class PlaceholderSegment(object):
     def __init__(self, tag, status='M', repeats='1', label=None, description=None):
         self.tag = tag
         self.mandatory = status == 'M'
-        self.repeats = repeats
+        self.repeats = int(repeats)
         self.label = label
         self.description = description
 
@@ -287,11 +291,12 @@ class SegmentGroup(object):
 class Group(object):
     elements = {}
 
-    def __init__(self, mandatory=False, repeats=1, label=None, description=None):
+    def __init__(self, mandatory=False, repeats=1, label=None, description=None, repeat=0):
         self.mandatory = mandatory
         self.repeats = repeats
         self.label = label
         self.description = description
+        self.repeat = repeat
 
     def __iter__(self):
         return self.elements.__iter__()
