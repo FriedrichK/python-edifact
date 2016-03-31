@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <TRANSMISSION>
-	<DTM status="M" repeats="9" description="A segment specifying the dates, and when relevant, the times related to the whole message. The segment must be specified at least once to specify the message date as allocated by the sender."></DTM>
+	<DTM status="M" repeats="9" label="message_dates" description="A segment specifying the dates, and when relevant, the times related to the whole message. The segment must be specified at least once to specify the message date as allocated by the sender."></DTM>
 	<GROUP status="C" repeats="9" label="document_references" description="A group of segments for specifying any references and their dates valid for the whole report.">
 		<RFF status="M" repeats="1" description="A segment for the inclusion of any references related to the complete report, e.g. invoice number, contract number."></RFF>
 		<DTM status="C" repeats="9" description="A segment specifying the date and where necessary the time of the reference detailed in the preceding RFF segment."></DTM>
@@ -16,7 +16,7 @@
 			<COM status="C" repeats="9" description="A segment specifying the communication channel and number for the specified contact."></COM>
 		</GROUP>
 	</GROUP>
-	<UNS status="M" repeats="1" description="A segment placed at the start of the detail section to avoid segment collision."></UNS>
+	<UNS status="M" repeats="1" label="separator" description="A segment placed at the start of the detail section to avoid segment collision."></UNS>
 	<GROUP status="M" repeats="99999" label="delivery_parties_and_meters" description="A group of segments identifying the delivery party (premise) and the meter for which consumption is being reported.">
 		<NAD status="M" repeats="1" description="A segment to identify the delivery party (premise) for which the following consumption information is being provided. It is recommended that where possible codes be used to identify the delivery party to facilitate the automatic processing."></NAD>
 		<GROUP status="M" repeats="99999" label="meters" description="A group of segments identifying the meter being reported, the date of the meter read, associated references, the physical characteristics of the meter, and the product or service for which consumption information is reported.">
@@ -49,5 +49,5 @@
 			</GROUP>
 		</GROUP>
 	</GROUP>
-	<CNT status="C" repeats="99" description="A segment by which control totals may be sent by the sender for checking by the receiver."></CNT>
+	<CNT status="C" repeats="99" label="control_totals" description="A segment by which control totals may be sent by the sender for checking by the receiver."></CNT>
 </TRANSMISSION>
